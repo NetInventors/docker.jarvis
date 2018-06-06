@@ -10,7 +10,7 @@ memcached:
     restart: "no"
 
 app:
-    build: app
+    image: dockerhub.devable.cloud:5000/jarvis:1.0.0
     volumes:
         - './data/html:/var/www/html'
         - './data/log:/var/log/app'
