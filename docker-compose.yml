@@ -1,0 +1,28 @@
+redis:
+    image: redis:alpine
+    command: redis-server --appendonly yes
+    volumes:
+        - ./data/redis:/data
+    restart: "no"
+
+memcached:
+    image: memcached:alpine
+    restart: "no"
+
+app:
+    build: app
+    volumes:
+        - './data/html:/var/www/html'
+        - './data/log:/var/log/app'
+    links:
+        - memcached:docker-memcached
+        - redis:docker-redis
+    external_links:
+        - mysql-server_mysql_1:docker-mysql
+        - mailhog_mailhog_1:docker-mailhog
+    environment:
+        - VIRTUAL_HOST=jarvis.localhost
+        - VIRTUAL_PORT=80
+    extra_hosts:
+        - 'jarvis.localhost:127.0.0.1'
+    restart: "no"
